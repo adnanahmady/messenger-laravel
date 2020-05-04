@@ -21,8 +21,19 @@ $factory->define(User::class, function (Faker $faker) {
     return [
         'name' => $faker->name,
         'email' => $faker->unique()->safeEmail,
-        'email_verified_at' => now(),
-        'password' => '$2y$10$92IXUNpkjO0rOQ5byMi.Ye4oKoEa3Ro9llC/.og/at2.uheWG/igi', // password
-        'remember_token' => Str::random(10),
+        'otp' => null,
+        'otp_at' => \Carbon\Carbon::now(),
+    ];
+});
+
+$factory->state(User::class, 'otp', function (Faker $faker) {
+    return [
+        'otp' => $faker->unique()->numberBetween($min = 1000, $max = 9999),
+    ];
+});
+
+$factory->state(User::class, 'authorized', function (Faker $faker) {
+    return [
+        'token_key' => 'someRandomToken'.$faker->unique()->numberBetween(0, 999999),
     ];
 });
