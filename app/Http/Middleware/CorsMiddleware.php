@@ -1,0 +1,29 @@
+<?php
+
+namespace App\Http\Middleware;
+
+use Closure;
+
+class CorsMiddleware
+{
+    /**
+     * Handle an incoming request.
+     *
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
+     */
+    public function handle($request, Closure $next)
+    {
+        $response = $next($request);
+
+        $response->header('Access-Control-Allow-Origin', config('controls.origin'));
+        $response->header('Access-Control-Allow-Methods', config('controls.methods'));
+        $response->header('Access-Control-Expose-Headers', config('controls.expose'));
+        $response->header('Access-Control-Allow-Headers',
+            $request->header('Access-Control-Request-Headers')
+        );
+        
+        return $response;
+    }
+}
